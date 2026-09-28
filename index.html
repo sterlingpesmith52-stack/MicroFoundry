@@ -26,11 +26,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: transparent;
         }
 
+        /* ⭐ FIXED: Prevent image collapse */
         .logo-box img {
-            height: 48px;   /* Larger logo */
-            width: auto;
+            width: 48px;
+            height: 48px;
+            object-fit: contain;
+            display: block;
         }
 
         h1 {
@@ -49,13 +53,12 @@
             margin-top: 10px;
         }
 
-        /* BLUE MICROFOUNDRY BUTTONS — AUTO-SIZED + LEFT ALIGNED */
         .widget-list a {
             display: inline-block;
             padding: 10px 16px;
             margin-bottom: 10px;
             border-radius: 6px;
-            background: #007BFF;      /* MicroFoundry blue */
+            background: #007BFF;
             color: white;
             text-decoration: none;
             font-size: 17px;
@@ -67,6 +70,7 @@
 
     <div class="header">
         <div class="logo-box">
+            <!-- Use .jpeg or .jpg depending on your actual file -->
             <img src="IMG_1741.jpeg" alt="MicroFoundry Logo" />
         </div>
         <h1>MicroWidgets</h1>
@@ -78,16 +82,16 @@
     </p>
 
     <div class="widget-list">
-        <a href="Clarifier/index.html">Clarifier</a>
-        <a href="StarterWidget/index.html">StarterWidget</a>
-        <a href="Quick-counter/index.html">Quick-counter</a>
-        <a href="PulseCounter/index.html">PulseCounter</a>
-        <a href="AutoFormatter/index.html">AutoFormatter</a>
-        <a href="AutoWriter/index.html">AutoWriter</a>
-        <a href="MicroNote/index.html">MicroNote</a>
-        <a href="TimeStampTool/index.html">TimeStampTool</a>
-        <a href="MicroTimer/index.html">MicroTimer</a>
-        <a href="MicroCopy/index.html">MicroCopy</a>
+        <a href="https://sterlingpesmith52-stack.github.io/Clarifier/">Clarifier</a>
+        <a href="https://sterlingpesmith52-stack.github.io/StarterWidget/">StarterWidget</a>
+        <a href="https://sterlingpesmith52-stack.github.io/QuickCounter/">QuickCounter</a>
+        <a href="https://sterlingpesmith52-stack.github.io/PulseCounter/">PulseCounter</a>
+        <a href="https://sterlingpesmith52-stack.github.io/AutoFormatter/">AutoFormatter</a>
+        <a href="https://sterlingpesmith52-stack.github.io/AutoWriter/">AutoWriter</a>
+        <a href="https://sterlingpesmith52-stack.github.io/MicroNote/">MicroNote</a>
+        <a href="https://sterlingpesmith52-stack.github.io/TimeStampTool/">TimeStampTool</a>
+        <a href="https://sterlingpesmith52-stack.github.io/MicroTimer/">MicroTimer</a>
+        <a href="https://sterlingpesmith52-stack.github.io/MicroCopy/">MicroCopy</a>
     </div>
 
 </body>
