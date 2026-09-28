@@ -3,68 +3,62 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MicroFoundry Starter Widget</title>
+    <title>MicroFoundry</title>
 
     <style>
         body {
             font-family: system-ui, sans-serif;
             margin: 0;
-            padding: 16px;
+            padding: 20px;
             background: white;
         }
 
         .header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 14px;
+            margin-bottom: 24px;
         }
 
         .logo-box {
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .logo-box img {
-            height: 28px;
+            height: 32px;
             width: auto;
         }
 
         h1 {
-            font-size: 22px;
+            font-size: 26px;
             margin: 0;
             padding: 0;
-            text-align: left;
         }
 
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
+        .intro {
+            font-size: 17px;
+            margin-bottom: 20px;
+            line-height: 1.45;
         }
 
-        button {
-            padding: 8px 14px;
-            font-size: 15px;
+        .widget-list {
+            margin-top: 10px;
+        }
+
+        .widget-list a {
+            display: block;
+            padding: 10px 14px;
+            margin-bottom: 10px;
             border: 1px solid #ccc;
             border-radius: 6px;
             background: white;
-            cursor: pointer;
-            text-align: left;
-            width: auto;
-        }
-
-        textarea {
-            width: 100%;
-            height: 180px;
-            padding: 12px;
-            font-size: 15px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            resize: vertical;
+            text-decoration: none;
+            color: black;
+            font-size: 17px;
         }
     </style>
 </head>
@@ -75,26 +69,26 @@
         <div class="logo-box">
             <img src="IMG_1741.jpeg" alt="MicroFoundry Logo" />
         </div>
-        <h1>Starter Widget</h1>
+        <h1>MicroWidgets</h1>
     </div>
 
-    <div class="controls">
-        <button onclick="runWidget()">Run</button>
-        <button onclick="clearText()">Clear</button>
+    <p class="intro">
+        Welcome to MicroFoundry. Below you’ll find buttons that take you to each one of our MicroWidgets.
+        Each widget is a tiny, focused tool designed to help you work faster and think clearer.
+    </p>
+
+    <div class="widget-list">
+        <a href="Clarifier/index.html">Clarifier</a>
+        <a href="StarterWidget/index.html">StarterWidget</a>
+        <a href="Quick-counter/index.html">Quick-counter</a>
+        <a href="PulseCounter/index.html">PulseCounter</a>
+        <a href="AutoFormatter/index.html">AutoFormatter</a>
+        <a href="AutoWriter/index.html">AutoWriter</a>
+        <a href="MicroNote/index.html">MicroNote</a>
+        <a href="TimeStampTool/index.html">TimeStampTool</a>
+        <a href="MicroTimer/index.html">MicroTimer</a>
+        <a href="MicroCopy/index.html">MicroCopy</a>
     </div>
-
-    <textarea id="input" placeholder="Paste text here..."></textarea>
-
-    <script>
-        function runWidget() {
-            const box = document.getElementById("input");
-            box.value = "Starter Widget executed.";
-        }
-
-        function clearText() {
-            document.getElementById("input").value = "";
-        }
-    </script>
 
 </body>
 </html>
