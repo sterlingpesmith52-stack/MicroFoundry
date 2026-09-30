@@ -1,98 +1,102 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MicroFoundry</title>
+  <meta charset="UTF-8">
+  <title>MicroFoundry</title>
 
-    <style>
-        body {
-            font-family: system-ui, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: white;
-        }
+  <!-- Universal styling preserved -->
+  <style>
+    body {
+      background: white;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 20px;
+    }
 
-        /* ⭐ Header: stacked + left aligned */
-        .header {
-            display: block;
-            text-align: left;
-            margin-bottom: 24px;
-        }
+    h1 {
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
 
-        /* ⭐ Larger left-aligned logo */
-        .logo-box {
-            width: 160px;
-            height: auto;
-            margin-bottom: 10px;
-        }
+    h2 {
+      font-size: 18px;
+      font-weight: 300;
+      margin-top: 0;
+      margin-bottom: 20px;
+    }
 
-        .logo-box img {
-            width: 160px;
-            height: auto;
-            object-fit: contain;
-            display: block;
-        }
+    h3 {
+      margin-top: 30px;
+      margin-bottom: 10px;
+      font-size: 20px;
+    }
 
-        /* ⭐ Title stays left aligned */
-        h1 {
-            font-size: 32px;
-            margin: 0;
-            padding: 0;
-            text-align: left;
-        }
+    .mw-intro {
+      margin-bottom: 16px;
+      font-size: 15px;
+      font-weight: 300;
+    }
 
-        .intro {
-            font-size: 17px;
-            margin-bottom: 20px;
-            line-height: 1.45;
-            text-align: left;
-        }
+    .mw-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
 
-        .widget-list {
-            margin-top: 10px;
-        }
-
-        .widget-list a {
-            display: inline-block;
-            padding: 10px 16px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            background: #007BFF;
-            color: white;
-            text-decoration: none;
-            font-size: 17px;
-        }
-    </style>
+    .mw-btn {
+      padding: 10px 14px;
+      background: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="header">
-        <div class="logo-box">
-            <img src="IMG_1741.jpeg" alt="MicroFoundry Logo" />
-        </div>
-        <h1>MicroWidgets</h1>
-    </div>
+  <!-- Header + Tagline -->
+  <h1>MicroFoundry</h1>
+  <h2>Tiny tools for everyday thinking.</h2>
 
-    <p class="intro">
-        Welcome to MicroFoundry. Below you’ll find buttons that take you to each one of our MicroWidgets.
-        Each widget is a tiny, focused tool designed to help you work faster and think clearer.
-    </p>
+  <!-- MicroWidgets Intro -->
+  <h3>MicroWidgets</h3>
+  <p class="mw-intro">
+    A collection of tiny, precise tools designed to help you work faster and think clearer.
+  </p>
 
-    <div class="widget-list">
-        <a href="https://sterlingpesmith52-stack.github.io/Clarifier/">Clarifier</a>
-        <a href="https://sterlingpesmith52-stack.github.io/StarterWidget/">StarterWidget</a>
-        <a href="https://sterlingpesmith52-stack.github.io/QuickCounter/">QuickCounter</a>
-        <a href="https://sterlingpesmith52-stack.github.io/PulseCounter/">PulseCounter</a>
-        <a href="https://sterlingpesmith52-stack.github.io/AutoFormatter/">AutoFormatter</a>
-        <a href="https://sterlingpesmith52-stack.github.io/AutoWriter/">AutoWriter</a>
-        <a href="https://sterlingpesmith52-stack.github.io/MicroNote/">MicroNote</a>
-        <a href="https://sterlingpesmith52-stack.github.io/TimeStampTool/">TimeStampTool</a>
-        <a href="https://sterlingpesmith52-stack.github.io/MicroTimer/">MicroTimer</a>
-        <a href="https://sterlingpesmith52-stack.github.io/MicroCopy/">MicroCopy</a>
-    </div>
+  <!-- CATEGORY: Cognitive Tools -->
+  <h3>Cognitive Tools</h3>
+  <div class="mw-grid">
+    <a href="Clarifier/index.html" class="mw-btn">Clarifier</a>
+    <a href="MicroSolver/index.html" class="mw-btn">MicroSolver</a>
+    <a href="TranscribingTool/index.html" class="mw-btn">Transcribing Tool</a>
+  </div>
+
+  <!-- CATEGORY: Writing & Formatting Tools -->
+  <h3>Writing & Formatting Tools</h3>
+  <div class="mw-grid">
+    <a href="AutoFormatter/index.html" class="mw-btn">AutoFormatter</a>
+    <a href="AutoWriter/index.html" class="mw-btn">AutoWriter</a>
+    <a href="MicroCopy/index.html" class="mw-btn">MicroCopy</a>
+  </div>
+
+  <!-- CATEGORY: Timing & Counting Tools -->
+  <h3>Timing & Counting Tools</h3>
+  <div class="mw-grid">
+    <a href="ClickCounter/index.html" class="mw-btn">ClickCounter</a>
+    <a href="PulseCounter/index.html" class="mw-btn">PulseCounter</a>
+    <a href="MicroTimer/index.html" class="mw-btn">MicroTimer</a>
+  </div>
+
+  <!-- CATEGORY: Utility Tools -->
+  <h3>Utility Tools</h3>
+  <div class="mw-grid">
+    <a href="SaveWidget/index.html" class="mw-btn">SaveWidget</a>
+    <a href="MicroNote/index.html" class="mw-btn">MicroNote</a>
+  </div>
 
 </body>
 </html>
+
