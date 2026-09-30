@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,31 +9,41 @@
       background: white;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       margin: 20px;
+      text-align: left; /* FULL LEFT ALIGN */
     }
 
     /* Header */
+    img.logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+      display: block; /* ensures left alignment */
+    }
+
     h1 {
-      font-size: 32px;
+      font-size: 34px;
+      margin: 0;
       margin-bottom: 6px;
     }
+
     h2 {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 300;
       margin-top: 0;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     /* Category headers */
     h3 {
-      margin-top: 28px;
-      margin-bottom: 8px;
-      font-size: 20px;
+      margin-top: 32px;
+      margin-bottom: 10px;
+      font-size: 22px;
     }
 
     /* Intro text */
     .mw-intro {
-      margin-bottom: 16px;
-      font-size: 15px;
+      margin-bottom: 20px;
+      font-size: 16px;
       font-weight: 300;
     }
 
@@ -42,18 +51,18 @@
     .mw-grid {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 28px;
+      gap: 14px;
+      margin-bottom: 32px;
     }
 
-    /* Large tappable buttons */
+    /* LARGE BUTTONS */
     .mw-btn {
-      padding: 14px 18px;
+      padding: 16px 22px;
       background: #007bff;
       color: white;
       text-decoration: none;
       border-radius: 6px;
-      font-size: 16px;
+      font-size: 18px;
       display: inline-block;
     }
   </style>
@@ -61,12 +70,10 @@
 
 <body>
 
-  <!-- Logo + Header -->
-  <div style="text-align:center; margin-bottom:20px;">
-    <img src="IMG_1741.jpeg" alt="MicroFoundry Logo" style="width:120px; height:auto; margin-bottom:10px;">
-    <h1>MicroFoundry</h1>
-    <h2>Tiny tools for everyday thinking.</h2>
-  </div>
+  <!-- Left-aligned logo + header -->
+  <img src="IMG_1741.jpeg" alt="MicroFoundry Logo" class="logo">
+  <h1>MicroFoundry</h1>
+  <h2>Tiny tools for everyday thinking.</h2>
 
   <!-- MicroWidgets Intro -->
   <h3>MicroWidgets</h3>
