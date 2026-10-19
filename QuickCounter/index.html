@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QuickCounter: free online tally counter | MicroFoundry</title>
+<meta name="description" content="A simple tally counter for your phone. Tap to count people, laps, reps or anything else. Your count is saved automatically.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  #tap {
+    width: 100%;
+    min-height: 220px;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  #tap .mf-readout { margin: 0; font-size: 96px; color: inherit; }
+</style>
+</head>
+<body data-tool="QuickCounter">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">QuickCounter</h1>
+  <p class="mf-what">Tap the big button to count. Your count is kept if you leave the page.</p>
+
+  <button class="mf-btn mf-btn--go" id="tap" aria-label="Add one">
+    <span class="mf-readout" id="count" aria-live="polite">0</span>
+    <span>Tap to add one</span>
+  </button>
+
+  <div class="mf-row">
+    <button class="mf-btn" id="minus" aria-label="Take one away">−1</button>
+    <button class="mf-btn" id="copy">Copy</button>
+    <button class="mf-btn mf-btn--quiet" id="reset">Reset</button>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+let count = MF.store.get("quickcounter.count", 0);
+const out = document.getElementById("count");
+
+function render() {
+  out.textContent = count;
+  MF.store.set("quickcounter.count", count);
+}
+
+document.getElementById("tap").addEventListener("click", () => { count++; MF.buzz(); render(); });
+document.getElementById("minus").addEventListener("click", () => { if (count > 0) { count--; render(); } });
+document.getElementById("copy").addEventListener("click", () => MF.copy(String(count)));
+document.getElementById("reset").addEventListener("click", e => {
+  if (count === 0) return;
+  MF.confirmTap(e.currentTarget, "Tap to reset", () => { count = 0; render(); });
+});
+
+render();
+</script>
+</body>
+</html>

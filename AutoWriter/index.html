@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AutoWriter: get a first draft fast | MicroFoundry</title>
+<meta name="description" content="Describe the email, post or note you need and AutoWriter writes a first draft. Beat writer's block from your phone.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+</head>
+<body data-tool="AutoWriter">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">AutoWriter</h1>
+  <p class="mf-what">Say what you need, such as "a short thank-you note to my neighbor for the flowers", and get a first draft to edit.</p>
+
+  <div class="mf-plate">
+    <label class="mf-label" for="input">What should AutoWriter write?</label>
+    <textarea id="input" placeholder="A friendly two-line reminder to my team about Friday's meeting"></textarea>
+  </div>
+
+  <div class="mf-row" style="margin-bottom:16px">
+    <button class="mf-btn mf-btn--go" id="go">Write draft</button>
+  </div>
+
+  <div class="mf-plate">
+    <div class="mf-label">Draft</div>
+    <div class="mf-output" id="output" aria-live="polite"></div>
+    <div class="mf-row" style="margin-top:12px">
+      <button class="mf-btn" id="copy">Copy draft</button>
+      <button class="mf-btn mf-btn--quiet" id="clear">Clear</button>
+    </div>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+/*
+  AutoWriter needs a small server to talk to the AI model, because the API key
+  must stay secret. GitHub Pages can only serve plain pages, so the old
+  api/generate.js never ran there. Put the server's address here once it exists.
+*/
+const API_URL = "";
+
+const $ = id => document.getElementById(id);
+
+$("go").addEventListener("click", async () => {
+  const prompt = $("input").value.trim();
+  if (!prompt) { MF.toast("Tell AutoWriter what to write first"); $("input").focus(); return; }
+
+  if (!API_URL) {
+    $("output").textContent = "AutoWriter isn't connected to its writing service yet. It's coming soon.";
+    return;
+  }
+
+  $("go").disabled = true;
+  $("output").textContent = "Writing…";
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ prompt })
+    });
+    const data = await res.json().catch(() => ({}));
+    const text = data?.choices?.[0]?.message?.content;
+    $("output").textContent = res.ok && text
+      ? text.trim()
+      : "AutoWriter couldn't write a draft just now. Try again in a minute.";
+  } catch (e) {
+    $("output").textContent = "AutoWriter needs an internet connection. Check your connection and try again.";
+  } finally {
+    $("go").disabled = false;
+  }
+});
+
+$("copy").addEventListener("click", () => MF.copy($("output").textContent));
+$("clear").addEventListener("click", () => { $("input").value = ""; $("output").textContent = ""; });
+</script>
+</body>
+</html>

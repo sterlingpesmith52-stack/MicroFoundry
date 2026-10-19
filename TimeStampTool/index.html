@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TimeStampTool: copy the current date and time | MicroFoundry</title>
+<meta name="description" content="Get the current date and time in several formats and copy it with one tap. Handy for notes, logs and records.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  .stamp {
+    width: 100%;
+    justify-content: space-between;
+    text-align: left;
+    gap: 12px;
+    padding: 12px 16px;
+    min-height: 64px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    white-space: normal;
+  }
+  .stamp small { display: block; color: var(--muted); font-weight: 500; font-size: 14px; }
+  .stamp .act { color: var(--accent); font-weight: 700; flex: none; }
+</style>
+</head>
+<body data-tool="TimeStampTool">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">TimeStampTool</h1>
+  <p class="mf-what">Tap any format to copy it. Tap "Update to now" to refresh the time.</p>
+
+  <div id="stamps"></div>
+
+  <div class="mf-row" style="margin-top:6px">
+    <button class="mf-btn mf-btn--go" id="now">Update to now</button>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+const FORMATS = [
+  { name: "Everyday",     make: d => d.toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" }) },
+  { name: "With seconds", make: d => d.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit", second: "2-digit" }) },
+  { name: "Date only",    make: d => d.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" }) },
+  { name: "Short",        make: d => d.toLocaleString("en-US", { month: "numeric", day: "numeric", year: "2-digit", hour: "numeric", minute: "2-digit" }) },
+  { name: "Sortable",     make: d => {
+      const p = n => String(n).padStart(2, "0");
+      return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+  } }
+];
+
+const box = document.getElementById("stamps");
+
+function render() {
+  const d = new Date();
+  box.innerHTML = "";
+  FORMATS.forEach(f => {
+    const value = f.make(d);
+    const b = document.createElement("button");
+    b.className = "mf-btn stamp";
+    b.innerHTML = `<span><small>${f.name}</small><span></span></span><span class="act">Copy</span>`;
+    b.querySelector("span > span").textContent = value;
+    b.addEventListener("click", () => MF.copy(value, "Copied " + f.name.toLowerCase()));
+    box.appendChild(b);
+  });
+}
+
+document.getElementById("now").addEventListener("click", () => { render(); MF.toast("Updated"); });
+document.addEventListener("visibilitychange", () => { if (!document.hidden) render(); });
+render();
+</script>
+</body>
+</html>

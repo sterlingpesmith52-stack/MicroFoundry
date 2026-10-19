@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decider: free random choice picker | MicroFoundry</title>
+<meta name="description" content="Can't decide? List your options and Decider picks one at random. Free, instant, works on your phone.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  #pick { font-size: 44px; overflow-wrap: anywhere; min-height: 1.1em; }
+  #pick.is-empty { color: var(--muted); font-size: 20px; font-stretch: 100%; font-weight: 600; }
+</style>
+</head>
+<body data-tool="Decider">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">Decider</h1>
+  <p class="mf-what">Can't agree? List your options, one per line, and let Decider choose.</p>
+
+  <div class="mf-plate">
+    <label class="mf-label" for="choices">Your options</label>
+    <textarea id="choices" placeholder="Pizza&#10;Tacos&#10;Noodles&#10;Burgers"></textarea>
+  </div>
+
+  <div class="mf-plate" aria-live="polite">
+    <div class="mf-label">Decider picked</div>
+    <div id="pick" class="mf-readout is-empty">Nothing yet</div>
+  </div>
+
+  <div class="mf-row">
+    <button class="mf-btn mf-btn--go" id="go">Choose for me</button>
+    <button class="mf-btn" id="clear">Clear</button>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+const box = document.getElementById("choices");
+const pick = document.getElementById("pick");
+const go = document.getElementById("go");
+
+box.value = MF.store.get("decider.choices", "");
+box.addEventListener("input", () => MF.store.set("decider.choices", box.value));
+
+function options() {
+  return box.value.split("\n").map(s => s.trim()).filter(Boolean);
+}
+
+function show(text, empty) {
+  pick.textContent = text;
+  pick.classList.toggle("is-empty", !!empty);
+}
+
+go.addEventListener("click", () => {
+  const list = options();
+  if (list.length < 2) { show("Add at least two options", true); return; }
+
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const winner = list[Math.floor(Math.random() * list.length)];
+  if (reduce) { show(winner); MF.buzz(30); return; }
+
+  // A short shuffle so the pick feels like a draw, then land on the winner.
+  go.disabled = true;
+  let n = 0;
+  const spin = setInterval(() => {
+    show(list[n++ % list.length]);
+    if (n > 10) {
+      clearInterval(spin);
+      show(winner);
+      MF.buzz(30);
+      go.disabled = false;
+    }
+  }, 70);
+});
+
+document.getElementById("clear").addEventListener("click", () => {
+  box.value = "";
+  MF.store.set("decider.choices", "");
+  show("Nothing yet", true);
+  box.focus();
+});
+</script>
+</body>
+</html>

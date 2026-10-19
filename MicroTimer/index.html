@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MicroTimer: free stopwatch and countdown timer | MicroFoundry</title>
+<meta name="description" content="A simple stopwatch and countdown timer for your phone. Keeps accurate time even if your screen locks. Great for cooking, focus sessions and exercise.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  .seg .mf-btn { min-height: 46px; font-size: 16px; }
+  #display { font-size: 76px; text-align: center; margin: 18px 0 6px; }
+  #display.is-done { color: var(--accent); }
+  .presets { margin-top: 12px; }
+  .presets .mf-btn { min-height: 46px; flex: 1 1 18%; padding: 0 8px; font-size: 16px; }
+  #msg { text-align: center; }
+</style>
+</head>
+<body data-tool="MicroTimer">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">MicroTimer</h1>
+  <p class="mf-what">A stopwatch and a countdown timer. They keep correct time even if your screen locks.</p>
+
+  <div class="mf-row seg" id="modes">
+    <button class="mf-btn is-on" data-mode="stopwatch">Stopwatch</button>
+    <button class="mf-btn" data-mode="countdown">Countdown</button>
+  </div>
+
+  <div class="mf-plate" style="margin-top:12px">
+    <div class="mf-readout" id="display" aria-live="off">0:00.0</div>
+    <p class="mf-status" id="msg" aria-live="polite"></p>
+    <div class="mf-row presets" id="presets" hidden>
+      <button class="mf-btn" data-min="1">1 min</button>
+      <button class="mf-btn" data-min="3">3 min</button>
+      <button class="mf-btn" data-min="5">5 min</button>
+      <button class="mf-btn" data-min="10">10 min</button>
+      <button class="mf-btn" data-min="25">25 min</button>
+    </div>
+  </div>
+
+  <div class="mf-row">
+    <button class="mf-btn mf-btn--go" id="start">Start</button>
+    <button class="mf-btn" id="reset">Reset</button>
+    <button class="mf-btn" id="copy">Copy</button>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// State is saved so a reload or a locked phone doesn't lose the timer.
+let s = MF.store.get("microtimer.state", null) || {
+  mode: "stopwatch",
+  running: false,
+  startedAt: 0,   // when the current run began (ms)
+  banked: 0,      // ms counted before the current run
+  target: 5 * 60 * 1000
+};
+let raf = null;
+
+const save = () => MF.store.set("microtimer.state", s);
+const elapsed = () => s.banked + (s.running ? Date.now() - s.startedAt : 0);
+
+function fmt(ms, tenths) {
+  ms = Math.max(0, ms);
+  const total = tenths ? Math.floor(ms / 100) : Math.ceil(ms / 1000) * 10;
+  const t = total % 10;
+  const sec = Math.floor(total / 10) % 60;
+  const min = Math.floor(total / 600) % 60;
+  const hr = Math.floor(total / 36000);
+  const mm = hr ? String(min).padStart(2, "0") : String(min);
+  const base = (hr ? hr + ":" : "") + mm + ":" + String(sec).padStart(2, "0");
+  return tenths ? base + "." + t : base;
+}
+
+function shownTime() {
+  return s.mode === "stopwatch" ? fmt(elapsed(), true) : fmt(s.target - elapsed(), false);
+}
+
+function draw() {
+  $("display").textContent = shownTime();
+  if (s.mode === "countdown" && s.running && elapsed() >= s.target) { done(); return; }
+  if (s.running) raf = requestAnimationFrame(draw);
+}
+
+function done() {
+  s.running = false; s.banked = s.target; save();
+  $("display").textContent = "0:00";
+  $("display").classList.add("is-done");
+  $("msg").textContent = "Time's up";
+  $("start").textContent = "Start";
+  MF.buzz([300, 150, 300, 150, 300]);
+  beep();
+}
+
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.35, 0.7].forEach(at => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.25, ctx.currentTime + at);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + at + 0.25);
+      o.start(ctx.currentTime + at); o.stop(ctx.currentTime + at + 0.3);
+    });
+  } catch (_) {}
+}
+
+function syncUI() {
+  [...$("modes").children].forEach(b => b.classList.toggle("is-on", b.dataset.mode === s.mode));
+  $("presets").hidden = s.mode !== "countdown";
+  [...$("presets").children].forEach(b => b.classList.toggle("is-on", Number(b.dataset.min) * 60000 === s.target));
+  $("start").textContent = s.running ? "Pause" : (elapsed() > 0 && !(s.mode === "countdown" && elapsed() >= s.target) ? "Resume" : "Start");
+  $("display").classList.remove("is-done");
+  $("msg").textContent = "";
+  cancelAnimationFrame(raf);
+  draw();
+}
+
+$("start").addEventListener("click", () => {
+  if (s.running) {
+    s.banked = elapsed(); s.running = false;
+  } else {
+    if (s.mode === "countdown" && elapsed() >= s.target) s.banked = 0;
+    s.startedAt = Date.now(); s.running = true;
+  }
+  save(); syncUI();
+});
+
+function reset() { s.running = false; s.banked = 0; save(); syncUI(); }
+$("reset").addEventListener("click", reset);
+
+$("modes").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || b.dataset.mode === s.mode) return;
+  if (s.running) { MF.toast("Pause the timer first"); return; }
+  s.mode = b.dataset.mode; reset();
+});
+
+$("presets").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  s.target = Number(b.dataset.min) * 60000; reset();
+});
+
+$("copy").addEventListener("click", () => MF.copy(shownTime()));
+
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { cancelAnimationFrame(raf); draw(); } });
+
+syncUI();
+</script>
+</body>
+</html>

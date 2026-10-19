@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MicroNote: quick notes that save themselves | MicroFoundry</title>
+<meta name="description" content="Jot a quick note on your phone. MicroNote saves as you type, with no sign-up and no app to install.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  #note { min-height: 46vh; }
+  .meta { display: flex; justify-content: space-between; margin-top: 8px; }
+</style>
+</head>
+<body data-tool="MicroNote">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">MicroNote</h1>
+  <p class="mf-what">Your note saves as you type and stays on this phone.</p>
+
+  <div class="mf-plate">
+    <label class="sr-only" for="note">Note</label>
+    <textarea id="note" placeholder="Start typing"></textarea>
+    <div class="meta">
+      <span class="mf-status" id="status" aria-live="polite"></span>
+      <span class="mf-note" id="chars">0 characters</span>
+    </div>
+  </div>
+
+  <div class="mf-row">
+    <button class="mf-btn mf-btn--go" id="copy">Copy</button>
+    <button class="mf-btn" id="stamp">Add time</button>
+    <button class="mf-btn mf-btn--quiet" id="clear">Delete</button>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+const note = document.getElementById("note");
+const status = document.getElementById("status");
+const chars = document.getElementById("chars");
+
+// Bring over a note saved by the earlier version of MicroNote, if there is one.
+let saved = MF.store.get("micronote.text", null);
+if (saved === null) { try { saved = localStorage.getItem("micronote") || ""; } catch (_) { saved = ""; } }
+note.value = saved;
+
+let timer;
+function save(msg = "Saved") {
+  MF.store.set("micronote.text", note.value);
+  chars.textContent = note.value.length + (note.value.length === 1 ? " character" : " characters");
+  status.textContent = msg;
+}
+note.addEventListener("input", () => { status.textContent = ""; clearTimeout(timer); timer = setTimeout(save, 400); });
+
+document.getElementById("copy").addEventListener("click", () => MF.copy(note.value));
+
+document.getElementById("stamp").addEventListener("click", () => {
+  const stamp = new Date().toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+  const pos = note.selectionStart ?? note.value.length;
+  note.value = note.value.slice(0, pos) + stamp + " " + note.value.slice(pos);
+  save();
+  note.focus();
+});
+
+document.getElementById("clear").addEventListener("click", e => {
+  if (!note.value) return;
+  MF.confirmTap(e.currentTarget, "Tap to delete", () => { note.value = ""; save("Deleted"); });
+});
+
+save("");
+</script>
+</body>
+</html>

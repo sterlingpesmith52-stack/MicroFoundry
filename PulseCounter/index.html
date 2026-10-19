@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PulseCounter: count your pulse or breathing rate | MicroFoundry</title>
+<meta name="description" content="Tap along with a heartbeat or breath for 15, 30 or 60 seconds and get beats or breaths per minute. Free and works on your phone.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  .seg { margin-bottom: 12px; }
+  .seg .mf-btn { min-height: 46px; font-size: 16px; }
+  #tap { width: 100%; min-height: 170px; flex-direction: column; gap: 2px; margin: 4px 0 12px; }
+  #tap .mf-readout { margin: 0; color: inherit; }
+  .stats { display: flex; justify-content: space-between; gap: 12px; }
+  .stats strong { display: block; font-size: 28px; font-stretch: 125%; font-variant-numeric: tabular-nums; }
+  .hist { list-style: none; margin: 0; padding: 0; }
+  .hist li { display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--line); }
+  .hist li:first-child { border-top: 0; }
+</style>
+</head>
+<body data-tool="PulseCounter">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">PulseCounter</h1>
+  <p class="mf-what">Tap once for every heartbeat or breath. The clock starts on your first tap.</p>
+
+  <div class="mf-plate">
+    <span class="mf-label">Counting</span>
+    <div class="mf-row seg" id="modes">
+      <button class="mf-btn is-on" data-mode="pulse">Pulse</button>
+      <button class="mf-btn" data-mode="breath">Breathing</button>
+    </div>
+    <span class="mf-label">For</span>
+    <div class="mf-row seg" id="durs">
+      <button class="mf-btn" data-d="15">15 sec</button>
+      <button class="mf-btn is-on" data-d="30">30 sec</button>
+      <button class="mf-btn" data-d="60">60 sec</button>
+    </div>
+  </div>
+
+  <button class="mf-btn mf-btn--go" id="tap">
+    <span class="mf-readout" id="count">0</span>
+    <span id="tapHint">Tap for each beat</span>
+  </button>
+
+  <div class="mf-plate" aria-live="polite">
+    <div class="stats">
+      <div><span class="mf-note">Time left</span><strong id="left">30</strong></div>
+      <div><span class="mf-note" id="rateLabel">Beats per minute</span><strong id="rate">–</strong></div>
+    </div>
+    <p class="mf-status" id="status"></p>
+  </div>
+
+  <div class="mf-row">
+    <button class="mf-btn" id="stop" disabled>Stop</button>
+    <button class="mf-btn" id="save" disabled>Save</button>
+    <button class="mf-btn mf-btn--quiet" id="reset">Reset</button>
+  </div>
+
+  <div class="mf-plate" style="margin-top:16px">
+    <div class="mf-label">Saved readings</div>
+    <ul class="hist" id="hist"></ul>
+  </div>
+
+  <p class="mf-note">For everyday tracking only. PulseCounter is not a medical device. If a reading worries you, talk to a nurse or doctor.</p>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+const RANGES = { pulse: [60, 100], breath: [12, 20] };
+const UNIT = { pulse: "beats per minute", breath: "breaths per minute" };
+
+let mode = "pulse", duration = 30;
+let count = 0, startAt = 0, endAt = 0, tick = null, result = null;
+
+const $ = id => document.getElementById(id);
+
+function seg(groupId, attr, onPick) {
+  $(groupId).addEventListener("click", e => {
+    const b = e.target.closest("button");
+    if (!b || startAt) return;          // settings lock once counting starts
+    [...$(groupId).children].forEach(x => x.classList.toggle("is-on", x === b));
+    onPick(b.dataset[attr]);
+    reset();
+  });
+}
+seg("modes", "mode", v => { mode = v; });
+seg("durs", "d", v => { duration = Number(v); });
+
+function elapsed() { return ((endAt || Date.now()) - startAt) / 1000; }
+
+function finish(early) {
+  clearInterval(tick); tick = null;
+  endAt = Date.now();
+  const secs = early ? elapsed() : duration;
+  if (secs < 5) { $("status").textContent = "Count for at least 5 seconds to get a rate."; $("tap").disabled = true; return; }
+  result = Math.round(count * 60 / secs);
+  $("rate").textContent = result;
+  const [lo, hi] = RANGES[mode];
+  const note = result < lo ? "Below the typical adult range" : result > hi ? "Above the typical adult range" : "Within the typical adult range";
+  $("status").textContent = `${note} (${lo} to ${hi}).`;
+  $("left").textContent = "0";
+  $("tap").disabled = true;
+  $("tapHint").textContent = "Done";
+  $("stop").disabled = true;
+  $("save").disabled = false;
+  MF.buzz([60, 60, 60]);
+}
+
+function update() {
+  const left = Math.max(0, Math.ceil(duration - elapsed()));
+  $("left").textContent = left;
+  if (left === 0) finish(false);
+}
+
+$("tap").addEventListener("click", () => {
+  if (!startAt) {
+    startAt = Date.now();
+    tick = setInterval(update, 200);
+    $("stop").disabled = false;
+  }
+  count++;
+  $("count").textContent = count;
+  MF.buzz(8);
+});
+
+$("stop").addEventListener("click", () => finish(true));
+
+function reset() {
+  clearInterval(tick); tick = null;
+  count = 0; startAt = 0; endAt = 0; result = null;
+  $("count").textContent = "0";
+  $("left").textContent = duration;
+  $("rate").textContent = "–";
+  $("rateLabel").textContent = mode === "pulse" ? "Beats per minute" : "Breaths per minute";
+  $("tapHint").textContent = mode === "pulse" ? "Tap for each beat" : "Tap for each breath";
+  $("status").textContent = "";
+  $("tap").disabled = false;
+  $("stop").disabled = true;
+  $("save").disabled = true;
+}
+$("reset").addEventListener("click", reset);
+
+function renderHist() {
+  const list = MF.store.get("pulse.history", []);
+  $("hist").innerHTML = list.length
+    ? list.map(r => `<li><span><strong>${r.rate}</strong> ${UNIT[r.mode]}</span><span class="mf-note">${r.time}</span></li>`).join("")
+    : '<li class="mf-note">No saved readings yet.</li>';
+}
+
+$("save").addEventListener("click", () => {
+  if (result === null) return;
+  const list = MF.store.get("pulse.history", []);
+  list.unshift({ mode, rate: result, time: new Date().toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) });
+  MF.store.set("pulse.history", list.slice(0, 50));
+  $("save").disabled = true;
+  renderHist();
+  MF.toast("Reading saved");
+});
+
+// Keep time correct if the phone locks mid-count.
+document.addEventListener("visibilitychange", () => { if (tick) update(); });
+
+reset();
+renderHist();
+</script>
+</body>
+</html>

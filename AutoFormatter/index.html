@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AutoFormatter: clean up pasted text | MicroFoundry</title>
+<meta name="description" content="Paste messy text and fix extra spaces, broken line breaks, blank lines and curly quotes in one tap. Free, private, works on your phone.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  .opts { display: grid; gap: 4px; margin-top: 12px; }
+  .opts label { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+  .opts input { width: 22px; height: 22px; accent-color: var(--accent); }
+</style>
+</head>
+<body data-tool="AutoFormatter">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">AutoFormatter</h1>
+  <p class="mf-what">Paste messy text, such as an email or something copied from a PDF, and tidy it in one tap. Your paragraphs are kept.</p>
+
+  <div class="mf-plate">
+    <label class="mf-label" for="input">Your text</label>
+    <textarea id="input" placeholder="Paste text here"></textarea>
+    <div class="opts">
+      <label><input type="checkbox" id="optJoin" checked> Join lines broken mid-sentence</label>
+      <label><input type="checkbox" id="optBlank" checked> Remove extra blank lines</label>
+      <label><input type="checkbox" id="optQuotes"> Straighten curly quotes</label>
+      <label><input type="checkbox" id="optCaps"> Capitalize the start of sentences</label>
+    </div>
+  </div>
+
+  <div class="mf-row" style="margin-bottom:16px">
+    <button class="mf-btn mf-btn--go" id="go">Format</button>
+    <button class="mf-btn" id="paste">Paste</button>
+  </div>
+
+  <div class="mf-plate">
+    <div class="mf-label">Result</div>
+    <div class="mf-output" id="output" aria-live="polite"></div>
+    <div class="mf-row" style="margin-top:12px">
+      <button class="mf-btn" id="copy">Copy result</button>
+      <button class="mf-btn mf-btn--quiet" id="clear">Clear</button>
+    </div>
+  </div>
+
+  <section id="mf-more" class="mf-more"></section>
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+const LIST_LINE = /^\s*([-*•]|\d+[.)])\s+/;
+
+function format(raw) {
+  let text = raw.replace(/\r\n?/g, "\n").replace(/ /g, " ");
+
+  // Tidy spaces on every line.
+  text = text.split("\n").map(l => l.replace(/[ \t]+/g, " ").trim()).join("\n");
+  text = text.replace(/ +([,.;:!?])/g, "$1");
+
+  // Re-join lines that were broken in the middle of a sentence.
+  if ($("optJoin").checked) {
+    text = text.split(/\n{2,}/).map(para => {
+      const lines = para.split("\n");
+      return lines.reduce((acc, line) => {
+        if (!acc) return line;
+        if (LIST_LINE.test(line)) return acc + "\n" + line;
+        if (/-$/.test(acc) && /^[a-z]/.test(line)) return acc.slice(0, -1) + line; // hyphenated word
+        return acc + " " + line;
+      }, "");
+    }).join("\n\n");
+  }
+
+  if ($("optBlank").checked) text = text.replace(/\n{3,}/g, "\n\n");
+
+  if ($("optQuotes").checked) {
+    text = text.replace(/[‘’]/g, "'").replace(/[“”]/g, '"');
+  }
+
+  if ($("optCaps").checked) {
+    text = text.replace(/(^|[.!?]\s+|\n)([a-z])/g, (m, a, b) => a + b.toUpperCase());
+  }
+
+  return text.trim();
+}
+
+$("go").addEventListener("click", () => {
+  const raw = $("input").value;
+  if (!raw.trim()) { MF.toast("Paste some text first"); return; }
+  $("output").textContent = format(raw);
+});
+
+$("paste").addEventListener("click", async () => {
+  try { $("input").value = await navigator.clipboard.readText(); }
+  catch (e) { MF.toast("Press and hold in the box, then tap Paste"); $("input").focus(); }
+});
+
+$("copy").addEventListener("click", () => MF.copy($("output").textContent));
+$("clear").addEventListener("click", () => { $("input").value = ""; $("output").textContent = ""; });
+</script>
+</body>
+</html>

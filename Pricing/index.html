@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pricing | MicroFoundry</title>
+<meta name="description" content="Try every MicroFoundry tool free, then keep the ones you like with a one-time purchase. No subscriptions.">
+<meta name="theme-color" content="#eef0f2">
+<link rel="manifest" href="../manifest.webmanifest">
+<link rel="icon" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&display=swap">
+<link rel="stylesheet" href="../assets/mf.css">
+<script src="../assets/mf.js"></script>
+<style>
+  .bundle h2 { font-stretch: 125%; font-weight: 800; font-size: 26px; margin: 0 0 6px; line-height: 1.1; }
+  .bundle .price { font-stretch: 125%; font-weight: 800; font-size: 40px; margin: 6px 0 12px; }
+  .rows { list-style: none; margin: 0; padding: 0; }
+  .rows li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--line); }
+  .rows li:first-child { border-top: 0; }
+  .rows a.name { color: var(--ink); font-weight: 700; font-stretch: 112%; text-decoration: none; }
+  .rows .right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .rows .amt { font-weight: 700; font-variant-numeric: tabular-nums; }
+  .rows .buy { min-height: 40px; font-size: 15px; padding: 0 14px; }
+  .rows .tag { font-size: 14px; color: var(--muted); }
+  .rows .tag.own { color: var(--good); font-weight: 700; }
+  .how { margin: 0; padding-left: 20px; }
+  .how li { margin-bottom: 6px; }
+</style>
+</head>
+<body data-sub="1">
+<main class="mf-page">
+  <header class="mf-top">
+    <a href="../index.html" aria-label="MicroFoundry home"><img class="mf-logo" src="../assets/logo.png" alt="MicroFoundry"></a>
+    <a class="mf-all" href="../index.html">All tools</a>
+  </header>
+
+  <h1 class="mf-name">Pricing</h1>
+  <p class="mf-what" id="intro"></p>
+
+  <section class="mf-plate bundle">
+    <h2>Every tool, one price</h2>
+    <p class="mf-note" style="margin:0">All current tools, unlocked on this phone. Pay once, no subscription.</p>
+    <div class="price" id="bundlePrice"></div>
+    <div id="bundleBuy"></div>
+  </section>
+
+  <section class="mf-plate">
+    <div class="mf-label">Or buy just the tools you use</div>
+    <ul class="rows" id="rows"></ul>
+  </section>
+
+  <section class="mf-plate">
+    <div class="mf-label">How buying works</div>
+    <ol class="how">
+      <li>Pay securely through PayPal.</li>
+      <li>We email you an unlock code, usually within a day.</li>
+      <li>Enter the code below or on the tool's page. It's unlocked on this phone for good.</li>
+    </ol>
+    <div id="codeBox" style="margin-top:14px"></div>
+  </section>
+
+  <footer id="mf-foot" class="mf-foot"></footer>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const $ = id => document.getElementById(id);
+  $("intro").textContent = `Try every tool free ${MF.FREE_USES} times. Keep the ones you like with a one-time purchase.`;
+  $("bundlePrice").textContent = "$" + MF.BUNDLE.price;
+
+  const allOwned = MF.store.get("owned", []).includes("ALL");
+  $("bundleBuy").innerHTML = allOwned
+    ? '<p class="mf-status">You own every tool. Thank you!</p>'
+    : MF.BUNDLE.paypal
+      ? `<a class="mf-btn mf-btn--go" style="width:100%" href="${MF.BUNDLE.paypal}" target="_blank" rel="noopener">Buy all tools with PayPal</a>`
+      : '<p class="mf-note" style="margin:0">Purchases open soon. Until then, every tool is free to use.</p>';
+
+  $("rows").innerHTML = Object.entries(MF.TOOLS).map(([name, t]) => {
+    let right;
+    if (MF.owns(name)) right = '<span class="tag own">Owned</span>';
+    else if (!t.price) right = '<span class="tag">Coming soon</span>';
+    else if (t.paypal) right = `<span class="amt">$${t.price}</span><a class="mf-btn buy" href="${t.paypal}" target="_blank" rel="noopener">Buy</a>`;
+    else right = `<span class="amt">$${t.price}</span>`;
+    return `<li><a class="name" href="../${name}/index.html">${name}</a><span class="right">${right}</span></li>`;
+  }).join("");
+
+  $("codeBox").innerHTML = MF.codeForm("pricing");
+  MF.wireCodeForms($("codeBox"));
+});
+</script>
+</body>
+</html>
