@@ -6,6 +6,13 @@
 <title>MicroTimer: free stopwatch and countdown timer | MicroFoundry</title>
 <meta name="description" content="A simple stopwatch and countdown timer for your phone. Keeps accurate time even if your screen locks. Great for cooking, focus sessions and exercise.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/MicroTimer/">
+<meta property="og:title" content="MicroTimer: free stopwatch and countdown timer | MicroFoundry">
+<meta property="og:description" content="A simple stopwatch and countdown timer for your phone. Keeps accurate time even if your screen locks. Great for cooking, focus sessions and exercise.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/MicroTimer/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "MicroTimer", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/MicroTimer/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,6 +22,14 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   .seg .mf-btn { min-height: 46px; font-size: 16px; }
   #display { font-size: 76px; text-align: center; margin: 18px 0 6px; }
   #display.is-done { color: var(--accent); }
@@ -39,7 +54,7 @@
   </div>
 
   <div class="mf-plate" style="margin-top:12px">
-    <div class="mf-readout" id="display" aria-live="off">0:00.0</div>
+    <div class="mf-readout" id="display" data-fit aria-live="off">0:00.0</div>
     <p class="mf-status" id="msg" aria-live="polite"></p>
     <div class="mf-row presets" id="presets" hidden>
       <button class="mf-btn" data-min="1">1 min</button>
@@ -55,6 +70,17 @@
     <button class="mf-btn" id="reset">Reset</button>
     <button class="mf-btn" id="copy">Copy</button>
   </div>
+
+  <section class="mf-about">
+    <h2>A stopwatch and countdown timer for your phone</h2>
+    <p>Use the stopwatch to time anything: a walk, a phone call or a recipe step. Pause and resume as often as you like.</p>
+    <p>Switch to Countdown and choose 1, 3, 5, 10 or 25 minutes. It beeps when time is up.</p>
+    <p>MicroTimer keeps correct time even if your screen locks or you switch apps.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>What is the 25-minute option for?</summary><p>It&#x27;s the classic Pomodoro focus session: work for 25 minutes, then take a short break.</p></details>
+    <details><summary>Will the countdown beep if my screen is locked?</summary><p>Phones don&#x27;t let web pages make sounds while locked, so it beeps as soon as you unlock. Keep the screen on if you need to hear it straight away.</p></details>
+    <details><summary>Does it keep time if I leave the page?</summary><p>Yes. MicroTimer remembers when it started, so the time is right when you come back.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>
@@ -94,6 +120,7 @@ function shownTime() {
 
 function draw() {
   $("display").textContent = shownTime();
+  MF.fit($("display"));
   if (s.mode === "countdown" && s.running && elapsed() >= s.target) { done(); return; }
   if (s.running) raf = requestAnimationFrame(draw);
 }
@@ -101,6 +128,7 @@ function draw() {
 function done() {
   s.running = false; s.banked = s.target; save();
   $("display").textContent = "0:00";
+  MF.fit($("display"));
   $("display").classList.add("is-done");
   $("msg").textContent = "Time's up";
   $("start").textContent = "Start";

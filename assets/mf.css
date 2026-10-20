@@ -92,6 +92,7 @@ body {
 
 /* Tool heading: the stamped name is the signature element */
 .mf-name {
+  white-space: nowrap;
   font-stretch: 125%;
   font-weight: 800;
   font-size: 34px;
@@ -168,6 +169,7 @@ textarea:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 
 
 /* Big readouts */
 .mf-readout {
+  white-space: nowrap;
   font-stretch: 125%;
   font-weight: 800;
   font-size: 64px;

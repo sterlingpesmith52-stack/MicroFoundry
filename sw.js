@@ -1,6 +1,6 @@
 /* MicroFoundry offline support.
    Bump VERSION whenever you publish changes so phones pick up the new files. */
-const VERSION = "mf-v2";
+const VERSION = "mf-v3";
 const TOOLS = ["QuickCounter","PulseCounter","AutoFormatter","AutoWriter","MicroNote","TimeStampTool","MicroTimer","Decider"];
 const FILES = [
   "./", "manifest.webmanifest",

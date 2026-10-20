@@ -6,6 +6,13 @@
 <title>AutoFormatter: clean up pasted text | MicroFoundry</title>
 <meta name="description" content="Paste messy text and fix extra spaces, broken line breaks, blank lines and curly quotes in one tap. Free, private, works on your phone.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/AutoFormatter/">
+<meta property="og:title" content="AutoFormatter: clean up pasted text | MicroFoundry">
+<meta property="og:description" content="Paste messy text and fix extra spaces, broken line breaks, blank lines and curly quotes in one tap. Free, private, works on your phone.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/AutoFormatter/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "AutoFormatter", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/AutoFormatter/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,6 +22,14 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   .opts { display: grid; gap: 4px; margin-top: 12px; }
   .opts label { display: flex; align-items: center; gap: 12px; min-height: 44px; }
   .opts input { width: 22px; height: 22px; accent-color: var(--accent); }
@@ -43,7 +58,7 @@
 
   <div class="mf-row" style="margin-bottom:16px">
     <button class="mf-btn mf-btn--go" id="go">Format</button>
-    <button class="mf-btn" id="paste">Paste</button>
+    <button class="mf-btn" id="paste">Paste copied text</button>
   </div>
 
   <div class="mf-plate">
@@ -54,6 +69,17 @@
       <button class="mf-btn mf-btn--quiet" id="clear">Clear</button>
     </div>
   </div>
+
+  <section class="mf-about">
+    <h2>How to clean up messy text</h2>
+    <p>Paste text that came out badly: an email with lines broken in odd places, text copied from a PDF, or notes full of double spaces.</p>
+    <p>Tap Format. AutoFormatter joins lines broken mid-sentence, removes extra spaces and blank lines, and keeps your paragraphs.</p>
+    <p>Turn on the extra options to straighten curly quotes or capitalize the start of sentences, then tap Copy result.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>How do I remove line breaks from text copied from a PDF?</summary><p>Paste it into AutoFormatter with &quot;Join lines broken mid-sentence&quot; turned on, then tap Format.</p></details>
+    <details><summary>Will it change my words?</summary><p>No. It only fixes spacing, line breaks and, if you choose, quotes and capital letters.</p></details>
+    <details><summary>Is my text sent anywhere?</summary><p>No. Formatting happens on your phone, and your text never leaves it.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>

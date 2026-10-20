@@ -77,6 +77,27 @@ const MF = (() => {
     btn._armT = setTimeout(() => { btn.textContent = btn.dataset.label; delete btn.dataset.armed; }, 3000);
   };
 
+  // Shrink a big number so it always fits its box (wide font, small phones, long times).
+  const fitCache = new WeakMap();
+  const fit = (el) => {
+    if (!el) return;
+    const text = el.textContent;
+    const ps = getComputedStyle(el.parentElement);
+    const box = el.parentElement.clientWidth - parseFloat(ps.paddingLeft) - parseFloat(ps.paddingRight) - 4;
+    const prev = fitCache.get(el);
+    if (prev && prev.len === text.length && prev.box === box) return;
+    el.style.fontSize = "";
+    const max = parseFloat(getComputedStyle(el).fontSize);
+    const r = document.createRange();
+    r.selectNodeContents(el);
+    const w = r.getBoundingClientRect().width;
+    if (w > box && w > 0) el.style.fontSize = Math.floor(max * box / w) + "px";
+    fitCache.set(el, { len: text.length, box });
+  };
+  const fitAll = () => document.querySelectorAll("[data-fit]").forEach(el => { fitCache.delete(el); fit(el); });
+  window.addEventListener("resize", fitAll);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+
   const buzz = (ms = 12) => { try { navigator.vibrate && navigator.vibrate(ms); } catch (_) {} };
 
   /* ---------- Unlock codes ----------
@@ -206,6 +227,11 @@ const MF = (() => {
   }
 
   function chrome() {
+    // One-word tool names shrink to fit; longer headings simply wrap.
+    document.querySelectorAll(".mf-name").forEach(el => {
+      if (/\s/.test(el.textContent.trim())) { el.style.whiteSpace = "normal"; return; }
+      el.setAttribute("data-fit", ""); fit(el);
+    });
     const name = document.body.dataset.tool;
     const more = document.getElementById("mf-more");
     if (name && more && TOOLS[name]) {
@@ -234,7 +260,7 @@ const MF = (() => {
 
   return {
     TOOLS, BUNDLE, FREE_USES,
-    toast, copy, buzz, store, confirmTap,
+    toast, copy, buzz, store, confirmTap, fit,
     makeCode, checkCode, owns, forSale, buyButtons, codeForm, wireCodeForms
   };
 })();

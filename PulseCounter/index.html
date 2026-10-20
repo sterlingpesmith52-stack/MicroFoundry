@@ -6,6 +6,13 @@
 <title>PulseCounter: count your pulse or breathing rate | MicroFoundry</title>
 <meta name="description" content="Tap along with a heartbeat or breath for 15, 30 or 60 seconds and get beats or breaths per minute. Free and works on your phone.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/PulseCounter/">
+<meta property="og:title" content="PulseCounter: count your pulse or breathing rate | MicroFoundry">
+<meta property="og:description" content="Tap along with a heartbeat or breath for 15, 30 or 60 seconds and get beats or breaths per minute. Free and works on your phone.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/PulseCounter/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "PulseCounter", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/PulseCounter/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,10 +22,18 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   .seg { margin-bottom: 12px; }
   .seg .mf-btn { min-height: 46px; font-size: 16px; }
   #tap { width: 100%; min-height: 170px; flex-direction: column; gap: 2px; margin: 4px 0 12px; }
-  #tap .mf-readout { margin: 0; color: inherit; }
+  #tap .mf-readout { margin: 0; color: inherit; display: block; max-width: 100%; }
   .stats { display: flex; justify-content: space-between; gap: 12px; }
   .stats strong { display: block; font-size: 28px; font-stretch: 125%; font-variant-numeric: tabular-nums; }
   .hist { list-style: none; margin: 0; padding: 0; }
@@ -51,7 +66,7 @@
   </div>
 
   <button class="mf-btn mf-btn--go" id="tap">
-    <span class="mf-readout" id="count">0</span>
+    <span class="mf-readout" id="count" data-fit>0</span>
     <span id="tapHint">Tap for each beat</span>
   </button>
 
@@ -75,6 +90,17 @@
   </div>
 
   <p class="mf-note">For everyday tracking only. PulseCounter is not a medical device. If a reading worries you, talk to a nurse or doctor.</p>
+
+  <section class="mf-about">
+    <h2>How to count your pulse</h2>
+    <p>Find your pulse on the inside of your wrist or the side of your neck, using two fingers rather than your thumb.</p>
+    <p>Choose 15, 30 or 60 seconds, then tap the big button once for every beat. The clock starts on your first tap.</p>
+    <p>When time is up, PulseCounter works out your beats per minute. Switch to Breathing to count breaths the same way.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>What is a normal resting heart rate?</summary><p>For most adults, a resting heart rate between 60 and 100 beats per minute is considered typical. Fit people and some medications can make it lower.</p></details>
+    <details><summary>What is a normal breathing rate?</summary><p>For adults at rest, about 12 to 20 breaths per minute is typical.</p></details>
+    <details><summary>Is PulseCounter a medical device?</summary><p>No. It&#x27;s for everyday tracking only. If a reading worries you, talk to a nurse or doctor.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>
@@ -135,6 +161,7 @@ $("tap").addEventListener("click", () => {
   }
   count++;
   $("count").textContent = count;
+  MF.fit($("count"));
   MF.buzz(8);
 });
 
@@ -144,6 +171,7 @@ function reset() {
   clearInterval(tick); tick = null;
   count = 0; startAt = 0; endAt = 0; result = null;
   $("count").textContent = "0";
+  MF.fit($("count"));
   $("left").textContent = duration;
   $("rate").textContent = "–";
   $("rateLabel").textContent = mode === "pulse" ? "Beats per minute" : "Breaths per minute";

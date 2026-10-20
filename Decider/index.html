@@ -6,6 +6,13 @@
 <title>Decider: free random choice picker | MicroFoundry</title>
 <meta name="description" content="Can't decide? List your options and Decider picks one at random. Free, instant, works on your phone.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/Decider/">
+<meta property="og:title" content="Decider: free random choice picker | MicroFoundry">
+<meta property="og:description" content="Can't decide? List your options and Decider picks one at random. Free, instant, works on your phone.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/Decider/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "Decider", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/Decider/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,6 +22,14 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   #pick { font-size: 44px; overflow-wrap: anywhere; min-height: 1.1em; }
   #pick.is-empty { color: var(--muted); font-size: 20px; font-stretch: 100%; font-weight: 600; }
 </style>
@@ -43,6 +58,17 @@
     <button class="mf-btn mf-btn--go" id="go">Choose for me</button>
     <button class="mf-btn" id="clear">Clear</button>
   </div>
+
+  <section class="mf-about">
+    <h2>How Decider picks for you</h2>
+    <p>Type your options, one per line: places to eat, movies to watch, chores to tackle first.</p>
+    <p>Tap Choose for me and Decider picks one completely at random, so every option has an equal chance.</p>
+    <p>Your list is saved, so you can ask again next time without retyping it.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>Is the choice really random?</summary><p>Yes. Every option on your list has the same chance of being picked.</p></details>
+    <details><summary>Can I use it to settle an argument?</summary><p>That&#x27;s what it&#x27;s for. Agree to go with Decider&#x27;s pick before you tap.</p></details>
+    <details><summary>How many options can I add?</summary><p>As many as you like, as long as there are at least two.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>

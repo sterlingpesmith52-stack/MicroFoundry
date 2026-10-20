@@ -6,6 +6,13 @@
 <title>MicroNote: quick notes that save themselves | MicroFoundry</title>
 <meta name="description" content="Jot a quick note on your phone. MicroNote saves as you type, with no sign-up and no app to install.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/MicroNote/">
+<meta property="og:title" content="MicroNote: quick notes that save themselves | MicroFoundry">
+<meta property="og:description" content="Jot a quick note on your phone. MicroNote saves as you type, with no sign-up and no app to install.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/MicroNote/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "MicroNote", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/MicroNote/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,6 +22,14 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   #note { min-height: 46vh; }
   .meta { display: flex; justify-content: space-between; margin-top: 8px; }
 </style>
@@ -43,6 +58,17 @@
     <button class="mf-btn" id="stamp">Add time</button>
     <button class="mf-btn mf-btn--quiet" id="clear">Delete</button>
   </div>
+
+  <section class="mf-about">
+    <h2>A notepad that saves itself</h2>
+    <p>Start typing and MicroNote saves your note as you go. There&#x27;s no save button to forget and no account to create.</p>
+    <p>Tap Add time to stamp the date and time where your cursor is, which is handy for logs and to-do lists.</p>
+    <p>Your note stays on this phone. Tap Copy to move it into an email or message.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>Where is my note stored?</summary><p>On your phone only. Nobody else can see it, and it isn&#x27;t uploaded anywhere.</p></details>
+    <details><summary>Will my note still be there tomorrow?</summary><p>Yes, as long as you open MicroNote in the same browser and don&#x27;t clear its data.</p></details>
+    <details><summary>Can I use it offline?</summary><p>Yes. Add MicroFoundry to your home screen and MicroNote works without internet.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>

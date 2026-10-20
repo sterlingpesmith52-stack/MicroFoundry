@@ -6,6 +6,13 @@
 <title>TimeStampTool: copy the current date and time | MicroFoundry</title>
 <meta name="description" content="Get the current date and time in several formats and copy it with one tap. Handy for notes, logs and records.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/TimeStampTool/">
+<meta property="og:title" content="TimeStampTool: copy the current date and time | MicroFoundry">
+<meta property="og:description" content="Get the current date and time in several formats and copy it with one tap. Handy for notes, logs and records.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/TimeStampTool/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "TimeStampTool", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/TimeStampTool/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,6 +22,14 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   .stamp {
     width: 100%;
     justify-content: space-between;
@@ -45,6 +60,16 @@
   <div class="mf-row" style="margin-top:6px">
     <button class="mf-btn mf-btn--go" id="now">Update to now</button>
   </div>
+
+  <section class="mf-about">
+    <h2>Copy the date and time in one tap</h2>
+    <p>TimeStampTool shows the current date and time in five formats, from &quot;October 20, 2026 at 9:58 AM&quot; to a sortable 2026-10-20 09:58.</p>
+    <p>Tap any format to copy it, then paste it into a note, a log, a spreadsheet or a message.</p>
+    <p>Tap Update to now to refresh the time.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>Which format should I use for spreadsheets?</summary><p>Use Sortable (year-month-day). It sorts correctly in any spreadsheet.</p></details>
+    <details><summary>Does it use my time zone?</summary><p>Yes. The time comes from your phone, so it matches your local time.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>

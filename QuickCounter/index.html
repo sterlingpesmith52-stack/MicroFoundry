@@ -6,6 +6,13 @@
 <title>QuickCounter: free online tally counter | MicroFoundry</title>
 <meta name="description" content="A simple tally counter for your phone. Tap to count people, laps, reps or anything else. Your count is saved automatically.">
 <meta name="theme-color" content="#eef0f2">
+<link rel="canonical" href="https://sterlingpesmith52-stack.github.io/MicroFoundry/QuickCounter/">
+<meta property="og:title" content="QuickCounter: free online tally counter | MicroFoundry">
+<meta property="og:description" content="A simple tally counter for your phone. Tap to count people, laps, reps or anything else. Your count is saved automatically.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/QuickCounter/">
+<meta property="og:image" content="https://sterlingpesmith52-stack.github.io/MicroFoundry/assets/icon-512.png">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebApplication", "name": "QuickCounter", "url": "https://sterlingpesmith52-stack.github.io/MicroFoundry/QuickCounter/", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any", "isAccessibleForFree": true, "publisher": {"@type": "Organization", "name": "MicroFoundry"}}</script>
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="icon" href="../assets/icon-192.png">
 <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -15,6 +22,14 @@
 <link rel="stylesheet" href="../assets/mf.css">
 <script src="../assets/mf.js"></script>
 <style>
+  .mf-about { margin-top: 30px; }
+  .mf-about h2 { font-size: 20px; line-height: 1.2; margin: 0 0 10px; text-wrap: balance; }
+  .mf-about p { margin: 0 0 10px; max-width: 34em; }
+  .mf-about details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .mf-about details:last-of-type { border-bottom: 1px solid var(--line); }
+  .mf-about summary { font-weight: 600; cursor: pointer; min-height: 28px; }
+  .mf-about details p { margin: 8px 0 0; color: var(--muted); }
+
   #tap {
     width: 100%;
     min-height: 220px;
@@ -23,7 +38,7 @@
     font-size: 20px;
     margin-bottom: 12px;
   }
-  #tap .mf-readout { margin: 0; font-size: 96px; color: inherit; }
+  #tap .mf-readout { margin: 0; font-size: 96px; color: inherit; display: block; max-width: 100%; }
 </style>
 </head>
 <body data-tool="QuickCounter">
@@ -37,7 +52,7 @@
   <p class="mf-what">Tap the big button to count. Your count is kept if you leave the page.</p>
 
   <button class="mf-btn mf-btn--go" id="tap" aria-label="Add one">
-    <span class="mf-readout" id="count" aria-live="polite">0</span>
+    <span class="mf-readout" id="count" data-fit aria-live="polite">0</span>
     <span>Tap to add one</span>
   </button>
 
@@ -46,6 +61,17 @@
     <button class="mf-btn" id="copy">Copy</button>
     <button class="mf-btn mf-btn--quiet" id="reset">Reset</button>
   </div>
+
+  <section class="mf-about">
+    <h2>How to use this tally counter</h2>
+    <p>Tap the big button once for each thing you count: people coming through a door, laps, stitches, reps or birds at the feeder.</p>
+    <p>Your count is saved on your phone automatically, so you can close the page and pick up where you left off.</p>
+    <p>Tap −1 if you tap one too many, and Copy to paste the total into a message or note.</p>
+    <h2 style="margin-top:18px">Questions</h2>
+    <details><summary>Is QuickCounter free?</summary><p>Yes. You can try every MicroFoundry tool free, with no sign-up.</p></details>
+    <details><summary>Will I lose my count if I close the page?</summary><p>No. The count is kept on your phone until you tap Reset.</p></details>
+    <details><summary>Can I use it without internet?</summary><p>Yes. Once you&#x27;ve opened it, add MicroFoundry to your home screen and it works offline.</p></details>
+  </section>
 
   <section id="mf-more" class="mf-more"></section>
   <footer id="mf-foot" class="mf-foot"></footer>
@@ -57,6 +83,7 @@ const out = document.getElementById("count");
 
 function render() {
   out.textContent = count;
+  MF.fit(out);
   MF.store.set("quickcounter.count", count);
 }
 
